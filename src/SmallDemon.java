@@ -1,20 +1,19 @@
 
+public class SmallDemon extends AbstractDemon {
 
-
-public class Demon extends AbstractDemon{
-    String image;
+   String image;
     String lbl;
     String type;
     
-    public Demon(){
+    public SmallDemon(){
         super(0,0);
-        image="/Big demon.png";
+        image="/Small demon.png";
         type="Demon";
     }
     
-    public Demon(int x, int y){
+    public SmallDemon(int x, int y){
         super(x,y);
-        image="/Big demon.png";
+        image="/Small demon.png";
         type="Demon";
     }
     
@@ -35,4 +34,5 @@ public class Demon extends AbstractDemon{
     public String getlbl(){
         return lbl;
     }
+    
 }

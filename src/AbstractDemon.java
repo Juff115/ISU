@@ -1,4 +1,4 @@
-import TurtleGraphics.Pen;
+
 
 public abstract class AbstractDemon {
     protected double xPos, yPos, kills=0, wave=0;
@@ -24,8 +24,11 @@ public abstract class AbstractDemon {
         else return false;
     }
     
-    //to be done in child class
-    public abstract void draw(Pen p);
+    public abstract String getImage();
+    
+    public abstract void setlbl(String l);
+    
+    public abstract String getlbl();
     
     //move the demon
     public void move(double x, double y) {
