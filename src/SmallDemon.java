@@ -1,8 +1,11 @@
 
+import javax.swing.JLabel;
+
+
 public class SmallDemon extends AbstractDemon {
 
    String image;
-    String lbl;
+    JLabel lbl;
     String type;
     
     public SmallDemon(){
@@ -27,11 +30,11 @@ public class SmallDemon extends AbstractDemon {
     }
 
     @Override
-    public void setlbl(String l) {
+    public void setlbl(JLabel l) {
         lbl=l;
     }
     
-    public String getlbl(){
+    public JLabel getlbl(){
         return lbl;
     }
     

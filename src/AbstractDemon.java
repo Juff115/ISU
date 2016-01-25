@@ -1,8 +1,12 @@
 
+import javax.swing.JLabel;
+
+
 
 public abstract class AbstractDemon {
-    protected double xPos, yPos, kills=0, wave=0;
+    protected int xPos, yPos, wave=0;
     protected String level="";
+    public static int score;
     
     //create basic demon
     public AbstractDemon(){
@@ -15,45 +19,31 @@ public abstract class AbstractDemon {
         yPos=y;
     }
     
-    //check if collison
-    public boolean dead(int col){
-        if(col==1){
-            kills++;
-            return true;
-        }
-        else return false;
-    }
-    
     public abstract String getImage();
     
-    public abstract void setlbl(String l);
+    public abstract void setlbl(JLabel l);
     
-    public abstract String getlbl();
+    public abstract JLabel getlbl();
     
     //move the demon
-    public void move(double x, double y) {
+    public void move(int x, int y) {
         xPos=x;
         yPos=y;
     }
     
-    public void nextwave(){
-        wave++;
-    }
-    
-    public final double getxPos() {
+    public final int getxPos() {
         return xPos;
     }
 
-    public final double getyPos() {
+    public final int getyPos() {
         return yPos;
     }
     
-    public final double getkills(){
-        return kills;
+    public void updatescore(int s){
+        score+=s;
     }
     
-    public String toString(){
-        level="The wave is "+wave;
-        return level;
+    public int score(){
+        return score;
     }
 }

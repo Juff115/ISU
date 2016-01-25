@@ -4,16 +4,17 @@ import java.awt.event.KeyEvent;
 
 public class Game extends javax.swing.JFrame {
     AbstractDemon d[];
+    
     AnimationClass ac= new AnimationClass();
     
     public Game() {
         initComponents();
         d = new AbstractDemon[8];
-        d[0]=new Demon();
-        d[1]=new SmallDemon();
-        assign(0);
-        assign(1);
-        move(0);
+        d[0]= new Demon();
+        lbld1.setVisible(false);
+        lbld2.setVisible(false);
+        lbld3.setVisible(false);
+        lbld4.setVisible(false);
         
         
     }
@@ -32,7 +33,9 @@ public class Game extends javax.swing.JFrame {
         lbld2 = new javax.swing.JLabel();
         lbld3 = new javax.swing.JLabel();
         lbld4 = new javax.swing.JLabel();
-        lblplayer = new javax.swing.JLabel();
+        btnwave1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblscore = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1200, 900));
@@ -60,28 +63,50 @@ public class Game extends javax.swing.JFrame {
 
         lbld1.setBackground(new java.awt.Color(204, 204, 204));
         lbld1.setOpaque(true);
+        lbld1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbld1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lbld1MousePressed(evt);
+            }
+        });
         getContentPane().add(lbld1);
         lbld1.setBounds(20, 20, 120, 60);
 
         lbld2.setBackground(new java.awt.Color(204, 204, 204));
         lbld2.setOpaque(true);
         getContentPane().add(lbld2);
-        lbld2.setBounds(440, 20, 120, 60);
+        lbld2.setBounds(60, 280, 120, 60);
 
         lbld3.setBackground(new java.awt.Color(204, 204, 204));
         lbld3.setOpaque(true);
         getContentPane().add(lbld3);
-        lbld3.setBounds(610, 20, 120, 60);
+        lbld3.setBounds(260, 290, 120, 60);
 
         lbld4.setBackground(new java.awt.Color(204, 204, 204));
         lbld4.setOpaque(true);
         getContentPane().add(lbld4);
-        lbld4.setBounds(1040, 20, 120, 60);
+        lbld4.setBounds(340, 410, 120, 60);
 
-        lblplayer.setBackground(new java.awt.Color(255, 0, 0));
-        lblplayer.setOpaque(true);
-        getContentPane().add(lblplayer);
-        lblplayer.setBounds(70, 830, 110, 60);
+        btnwave1.setText("Press to Start Wave 1");
+        btnwave1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnwave1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnwave1);
+        btnwave1.setBounds(330, 170, 160, 23);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Score:");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(20, 820, 40, 20);
+
+        lblscore.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblscore.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        getContentPane().add(lblscore);
+        lblscore.setBounds(70, 820, 34, 20);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -107,50 +132,25 @@ public class Game extends javax.swing.JFrame {
         }
         else return 0;    
     }
-    
-    
-    
-    
-    public void move(int id){
-        m1(1);
-        m2(1);
-        //does not work
-        //m2(1);
-        //try a loop that increases the y each time by set amount
-    }
-    
-    public void m1(int id){
-        ac.jLabelXRight(20, 400, 2, 1, lbld1);
-        ac.jLabelYDown(20, 70, 20, 1, lbld1);
-    }
-    
-    public void m2(int id){
-        ac.jLabelXLeft(400, 20, 2, 1, lbld1);
-        ac.jLabelYDown(70, 120, 20, 1, lbld1);
-    }
-    
-    public void m3(int id){
-        
-    }
-    
+  
     public void assign(int id){
         //set demon to empty icon
         //set label location of demon
         if(check()==1){
             lbld1.setIcon(new javax.swing.ImageIcon(getClass().getResource(d[id].getImage())));
-            d[id].setlbl("lbld1");
+            d[id].setlbl(lbld1);
         }
         else if(check()==2){
             lbld2.setIcon(new javax.swing.ImageIcon(getClass().getResource(d[id].getImage())));
-            d[id].setlbl("lbld2");
+            d[id].setlbl(lbld2);
         }
         else if(check()==3){
             lbld3.setIcon(new javax.swing.ImageIcon(getClass().getResource(d[id].getImage())));
-            d[id].setlbl("lbld3");
+            d[id].setlbl(lbld3);
         }
         else if(check()==4) {
             lbld4.setIcon(new javax.swing.ImageIcon(getClass().getResource(d[id].getImage())));
-            d[id].setlbl("lbld4");
+            d[id].setlbl(lbld4);
         }
         
     }
@@ -171,16 +171,44 @@ public class Game extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyTyped
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        int key =evt.getKeyCode();
-        if(key==39){
-            ac.jLabelXRight(70, 800, 2, 1, lblplayer);
-                          
-        }
-        if(key==37){
-            ac.jLabelXLeft(800, 70, 2, 1, lblplayer);
-                          
-        }   
+    
     }//GEN-LAST:event_formKeyPressed
+
+    private void btnwave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnwave1ActionPerformed
+        //disable and invisible button so game can be played
+        btnwave1.setEnabled(false);
+        btnwave1.setVisible(false);
+        //make new demon
+        d[1]=new Demon(20,20);
+        assign(1);
+        //line up the label it is in
+        d[1].getlbl().setVisible(true);
+        d[1].getlbl().setAlignmentX(d[1].getxPos());
+        d[1].getlbl().setAlignmentY(d[1].getyPos());
+        //move demon
+        ac.jLabelXRight(d[1].getxPos(), 1300, 2, 1, d[1].getlbl());
+        
+        //need to add something to remove pic when past certain point
+        
+        
+    }//GEN-LAST:event_btnwave1ActionPerformed
+
+    private void lbld1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbld1MousePressed
+        String id=""+lbld1.getIcon();
+        if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Big%20demon.png")){
+            d[0].updatescore(10);
+            lblscore.setText(""+d[0].score());
+        }
+        if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Small%20demon.png")){
+            d[0].updatescore(20);
+            lblscore.setText(""+d[0].score());
+        }
+        lbld1.setVisible(false);
+    }//GEN-LAST:event_lbld1MousePressed
+
+    private void lbld1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbld1MouseClicked
+        
+    }//GEN-LAST:event_lbld1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -218,11 +246,13 @@ public class Game extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnwave1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblbigd;
     private javax.swing.JLabel lbld1;
     private javax.swing.JLabel lbld2;
     private javax.swing.JLabel lbld3;
     private javax.swing.JLabel lbld4;
-    private javax.swing.JLabel lblplayer;
+    private javax.swing.JLabel lblscore;
     // End of variables declaration//GEN-END:variables
 }
