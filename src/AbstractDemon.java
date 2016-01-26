@@ -5,7 +5,6 @@ import javax.swing.JLabel;
 
 public abstract class AbstractDemon {
     protected int xPos, yPos, wave=0;
-    protected String level="";
     public static int score;
     
     //create basic demon
@@ -24,6 +23,10 @@ public abstract class AbstractDemon {
     public abstract void setlbl(JLabel l);
     
     public abstract JLabel getlbl();
+    
+    public abstract void setAlive(boolean a);
+    
+    public abstract boolean check();
     
     //move the demon
     public void move(int x, int y) {

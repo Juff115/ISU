@@ -1,12 +1,12 @@
 
 import javax.swing.JLabel;
 
-
 public class SmallDemon extends AbstractDemon {
 
    String image;
     JLabel lbl;
     String type;
+    boolean isalive=true;
     
     public SmallDemon(){
         super(0,0);
@@ -36,6 +36,16 @@ public class SmallDemon extends AbstractDemon {
     
     public JLabel getlbl(){
         return lbl;
+    }
+
+    @Override
+    public void setAlive(boolean a) {
+        isalive = a;
+    }
+
+    @Override
+    public boolean check() {
+        return isalive;
     }
     
 }
