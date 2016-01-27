@@ -1,7 +1,7 @@
 
 import javax.swing.JLabel;
 
-
+//see Demon class and AbstractDemon for info
 public class DemonSplit extends Demon {
     JLabel lbl;
     

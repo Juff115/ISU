@@ -1,22 +1,44 @@
 
 import AppPackage.AnimationClass;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
+//This is a demon hunter game that only contains 2 waves of demons
+//It contains 4 labels for demons and a system to reuse the labels and assign new demons to empty labels because the code for the game is designed for a large multi level game
+//The game can have a max of 4 demons on screen at once, but in the demo the max amount that is seen at once is 3 demons
+//This is a DEMO VERSION of the game Demon Hunter
+//demons and split demons are worth 10 points, small demons are worth 20 points
+//a perfect score in the demo is 90
+
 public class Game extends javax.swing.JFrame {
+    //create an array of demons
     AbstractDemon d[];
     
+    //create and animationclass to allow the movement of Demons
     AnimationClass ac= new AnimationClass();
-    Thread thread, thread2;
+    //declare 3 threads to check if demons go off screen
+    Thread thread, thread2, thread3;
+    int che=1;
+    
+
+    
+
     
     
     public Game() {
         initComponents();
+        this.getContentPane().setBackground(Color.white);
         d = new AbstractDemon[8];
         d[0]= new Demon();
+        //create 5 and 6 to allow thread2 to run
+        d[5]=new SmallDemon();
+        d[6]=new SmallDemon();
         int id=1;
+        //start labels and wave 2 button not visible
         lbld1.setVisible(false);
         lbld2.setVisible(false);
         lbld3.setVisible(false);
@@ -26,6 +48,7 @@ public class Game extends javax.swing.JFrame {
             public void run(){
                 while(true){
                     try {
+                        //see if demon is off screen
                         if(d[1].getlbl().getLocation().x>1200){
                             d[1].getlbl().setVisible(false);
                             d[1].getlbl().setIcon(null);
@@ -35,6 +58,7 @@ public class Game extends javax.swing.JFrame {
                             btnwave2.setVisible(true);
                             }
                         }
+                        //see if demon is off screen
                          if(d[2].getlbl().getLocation().x>1200){
                             d[2].getlbl().setVisible(false);
                             d[2].getlbl().setIcon(null);
@@ -57,22 +81,67 @@ public class Game extends javax.swing.JFrame {
             public void run(){
                 while(true){
                     try {
+                        //see if demon is off screen
+                           if(d[4].getlbl().getLocation().x>1200){
+                            d[4].getlbl().setVisible(false);
+                            d[4].getlbl().setIcon(null);
+                            d[4].setAlive(false);
+                            //check if demon split has split, if it has not check if game done
+                            if(che==1){
+                                if(d[3].check()==false && d[4].check()==false){
+                                    btnwave2.setText("Game Over");
+                                    end();
+                                }
+                            }
+                            //if demon split has split check to see if everything is dead
+                            else if(d[3].check()==false && d[4].check()==false && d[5].check()==false && d[6].check()==false){
+                                btnwave2.setText("Game Over");
+                                end();
+                            }
+                        }
+                        //check if demon iss off screen   
                         if(d[3].getlbl().getLocation().x>1200){
                             d[3].getlbl().setVisible(false);
                             d[3].getlbl().setIcon(null);
                             d[3].setAlive(false);
-                            //check if next wave can start
+                            //check if game is done
                             if(d[3].check()==false && d[4].check()==false){
                                 btnwave2.setText("Game Over");
                                 end();
                             }
                         }
-                         if(d[4].getlbl().getLocation().x>1200){
-                            d[4].getlbl().setVisible(false);
-                            d[4].getlbl().setIcon(null);
-                            d[4].setAlive(false);
-                            //check if next wave can start
-                            if(d[3].check()==false && d[4].check()==false){
+                      
+                        
+                        
+                        Thread.currentThread().sleep(1000);
+                } catch (InterruptedException ex) {
+                    }
+                }
+            }
+        };
+        
+        thread3 = new Thread(){
+            public void run(){
+                while(true){
+                    try {
+                        //check if demon is off screen
+                        if(d[5].getlbl().getLocation().x>1200){
+                            d[5].getlbl().setVisible(false);
+                            d[5].getlbl().setIcon(null);
+                            d[5].setAlive(false);
+                            //check if game over
+                            if(d[3].check()==false && d[4].check()==false && d[5].check()==false && d[6].check()==false){
+                                btnwave2.setText("Game Over");
+                                end();
+                            }
+                        }
+                        //check if demon is off screen
+                         if(d[6].getlbl().getLocation().x>1200){
+                            d[6].getlbl().setVisible(false);
+                            d[6].getlbl().setIcon(null);
+                            d[6].setAlive(false);
+                            //check if game is over
+                            if(d[3].check()==false && d[4].check()==false && d[5].check()==false && d[6].check()==false){
                                 btnwave2.setText("Game Over");
                                 end();
                             }
@@ -109,9 +178,9 @@ public class Game extends javax.swing.JFrame {
         btnexit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1200, 900));
+        setTitle("Demon Hunter");
+        setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1200, 900));
-        setPreferredSize(new java.awt.Dimension(1200, 900));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -144,10 +213,20 @@ public class Game extends javax.swing.JFrame {
         lbld2.setBounds(20, 90, 120, 60);
 
         lbld3.setBackground(new java.awt.Color(204, 204, 204));
+        lbld3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lbld3MousePressed(evt);
+            }
+        });
         getContentPane().add(lbld3);
         lbld3.setBounds(20, 160, 120, 60);
 
         lbld4.setBackground(new java.awt.Color(204, 204, 204));
+        lbld4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lbld4MousePressed(evt);
+            }
+        });
         getContentPane().add(lbld4);
         lbld4.setBounds(20, 230, 120, 60);
 
@@ -218,6 +297,7 @@ public class Game extends javax.swing.JFrame {
     }
   
     public void end(){
+        //run game over code
         JOptionPane.showMessageDialog(this, "Game is over your final score is "+d[0].score()+"\n The demo is now over to buy the full game go to www.spacehunter.com");
         System.exit(0);
     }
@@ -272,39 +352,61 @@ public class Game extends javax.swing.JFrame {
         //move demon 2
         ac.jLabelXRight(d[2].getxPos(), 1300, 2, 1, d[2].getlbl());
         ac.jLabelYUp(d[2].getyPos(), 300, 5, 1, d[2].getlbl());
+        //called to check if demons go off screen
         thread.start();
         
-        //need to add something to remove pic when past certain point
+       
         
         
     }//GEN-LAST:event_btnwave1ActionPerformed
 
     private void lbld1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbld1MousePressed
         String id=""+lbld1.getIcon();
-        //see if it is a demon or small demon
+        //see if it is a demon or split demon
         if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Big%20demon.png") || id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Split%20demon.png")){
             //set and updte score
             d[0].updatescore(10);
             lblscore.setText(""+d[0].score());
         }
+        //see if small demon
         if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Small%20demon.png")){
            //set and update score
            d[0].updatescore(20);
            lblscore.setText(""+d[0].score());
         }
-        
-        //add if for split demon, make small demons label 3 and 4
+        //allow split demon to split
+        if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Split%20demon.png")){
+            che=0;
+            //create 2 small demons
+            d[5]= new SmallDemon(d[3].getlbl().getLocation().x,d[3].getlbl().getLocation().y-50);
+            d[6]= new SmallDemon(d[3].getlbl().getLocation().x,d[3].getlbl().getLocation().y+50);
+            lbld3.setIcon(new javax.swing.ImageIcon(getClass().getResource(d[5].getImage())));
+            d[5].setlbl(lbld3);
+            lbld4.setIcon(new javax.swing.ImageIcon(getClass().getResource(d[6].getImage())));
+            d[6].setlbl(lbld4);
+            //line up the label it is in
+            d[5].getlbl().setVisible(true);
+            d[5].getlbl().setBounds(d[5].getxPos(), d[5].getyPos(), 120, 60);
+            //line up second label
+            d[6].getlbl().setVisible(true);
+            d[6].getlbl().setBounds(d[6].getxPos(), d[6].getyPos(), 120, 60);
+            //move demon 5
+            ac.jLabelXRight(d[5].getxPos(), 1300, 2, 1, d[5].getlbl());
+            //move demon 6
+            ac.jLabelXRight(d[6].getxPos(), 1300, 2, 1, d[6].getlbl());
+            //check if demons are off screen
+            thread3.start();
+    	}
+
         
         //make labe lgone
         lbld1.setVisible(false);
         lbld1.setIcon(null);
-        //set demon dead
+        
         if(btnwave1.isEnabled()==false && btnwave2.isEnabled()==false){
+            //set demon dead
             d[3].setAlive(false);
-             //check if next wave can start
-            if(d[3].check()==false && d[4].check()==false){
-                end();
-            }
+          
         }
         else if(btnwave1.isEnabled()==false){
             d[1].setAlive(false);
@@ -322,12 +424,13 @@ public class Game extends javax.swing.JFrame {
 
     private void lbld2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbld2MousePressed
          String id=""+lbld2.getIcon();
-         //see if it is a demon or small demon
+         //see if it is a demon or split demon
         if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Big%20demon.png")|| id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Split%20demon.png")){
             //set and updte score
             d[0].updatescore(10);
             lblscore.setText(""+d[0].score());
         }
+        //see if small demon
         if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Small%20demon.png")){
             //set and updte score
             d[0].updatescore(20);
@@ -339,8 +442,8 @@ public class Game extends javax.swing.JFrame {
         //set demon dead
         if(btnwave1.isEnabled()==false && btnwave2.isEnabled()==false){
             d[4].setAlive(false);
-             //check if next wave can start
-            if(d[3].check()==false && d[4].check()==false){
+             //check if done
+            if(d[3].check()==false && d[4].check()==false && d[5].check() && d[6].check()){
                end();
             }
         }    
@@ -374,15 +477,70 @@ public class Game extends javax.swing.JFrame {
         ac.jLabelXRight(d[3].getxPos(), 1300, 2, 1, d[3].getlbl());
         ac.jLabelYDown(d[3].getyPos(), 600, 5, 1, d[3].getlbl());
         //move demon 2
-        ac.jLabelXRight(d[4].getxPos(), 1300, 2, 1, d[4].getlbl());
+        ac.jLabelXRight(d[4].getxPos(), 1300, 3, 1, d[4].getlbl());
        
-         //need to add something to remove pic when past certain point
+        //check if demons are off screen
         thread2.start();
     }//GEN-LAST:event_btnwave2ActionPerformed
 
     private void btnexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_btnexitActionPerformed
+
+    private void lbld3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbld3MousePressed
+        String id=""+lbld3.getIcon();
+     	//see if it is a demon or split demon
+    	if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Big%20demon.png")|| id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Split%20demon.png")){
+        	//set and updte score
+        	d[0].updatescore(10);
+        	lblscore.setText(""+d[0].score());
+    	}
+    	if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Small%20demon.png")){
+        	//set and updte score
+        	d[0].updatescore(20);
+        	lblscore.setText(""+d[0].score());
+    	}
+    	//make labe lgone
+    	lbld3.setIcon(null);
+    	lbld3.setVisible(false);
+    	//set demon dead
+    	if(btnwave1.isEnabled()==false && btnwave2.isEnabled()==false){
+        	d[5].setAlive(false);
+         	//check if done
+        	if(d[3].check()==false && d[4].check()==false && d[5].check()==false && d[6].check()==false){
+           	end();
+        	}
+    	}
+
+
+    }//GEN-LAST:event_lbld3MousePressed
+
+    private void lbld4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbld4MousePressed
+        String id=""+lbld4.getIcon();
+     	//see if it is a demon or split demon
+    	if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Big%20demon.png")|| id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Split%20demon.png")){
+        	//set and updte score
+        	d[0].updatescore(10);
+        	lblscore.setText(""+d[0].score());
+    	}
+        //check if small demon
+    	if(id.equals("file:/T:/ISS-ICS4U1-1/jame5380/Unit%205/ISU/build/classes/Small%20demon.png")){
+        	//set and updte score
+        	d[0].updatescore(20);
+        	lblscore.setText(""+d[0].score());
+    	}
+    	//make labe lgone
+    	lbld4.setIcon(null);
+    	lbld4.setVisible(false);
+    	//set demon dead
+    	if(btnwave1.isEnabled()==false && btnwave2.isEnabled()==false){
+        	d[6].setAlive(false);
+         	//check if done
+        	if(d[3].check()==false && d[4].check()==false && d[5].check()==false && d[6].check()==false){
+           	end();
+        	}
+    	}
+    }//GEN-LAST:event_lbld4MousePressed
 
     /**
      * @param args the command line arguments

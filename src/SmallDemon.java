@@ -1,6 +1,6 @@
 
 import javax.swing.JLabel;
-
+//see parent for info
 public class SmallDemon extends AbstractDemon {
 
    String image;
